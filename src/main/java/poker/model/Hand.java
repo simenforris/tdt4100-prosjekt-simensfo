@@ -12,6 +12,10 @@ public class Hand {
 		this.cards = new Card[handSize];
 	}
 
+	public int size() {
+		return this.cards.length;
+	}
+
 	public void addCard(int i, Card card) {
 		this.cards[i] = card;
 	}

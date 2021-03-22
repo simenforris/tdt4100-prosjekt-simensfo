@@ -1,5 +1,13 @@
 package poker.model;
 
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
+
 public class Card {
 	private final char suit;
 	private final int face;
@@ -16,65 +24,75 @@ public class Card {
 
 	public char getSuit() {
 		return this.suit;
-		// switch (this.suit) {
-		// 	case('S'):
-		// 		return "\u2660";
-		// 	case('H'):
-		// 		return "\u2665";
-		// 	case('D'):
-		// 		return "\u2666";
-		// 	case('C'):
-		// 		return "\u2663";
-		// 	default:
-		// 		return "?";
-		// }
 	}
 
 	public int getFace() {
 		return this.face;
-		// switch (this.face) {
-		// 	case(1):
-		// 		return "A";
-		// 	case(11):
-		// 		return "J";
-		// 	case(12):
-		// 		return "Q";
-		// 	case(13):
-		// 		return "K";
-		// 	default:
-		// 		return String.valueOf(this.face);
-		// }
 	}
 
 	@Override
 	public String toString() {
 		String suit;
 		switch (this.suit) {
-			case('S'):
+			case 'S':
 				suit = "\u2660";
-			case('H'):
+				break;
+			case 'H':
 				suit = "\u2665";
-			case('D'):
+				break;
+			case 'D':
 				suit = "\u2666";
-			case('C'):
+				break;
+			case 'C':
 				suit = "\u2663";
+				break;
 			default:
 				suit = "?";
+				break;
 		}
 		String face;
 		switch (this.face) {
-			case(1):
+			case 1:
 				face = "A";
-			case(11):
+				break;
+			case 11:
 				face = "J";
-			case(12):
+				break;
+			case 12:
 				face = "Q";
-			case(13):
+				break;
+			case 13:
 				face = "K";
+				break;
 			default:
 				face = String.valueOf(this.face);
+				break;
+		}
+		return suit + face;
+	}
+
+	public VBox model() {
+		VBox newCard = new VBox();
+		newCard.getStyleClass().add("card");
+		newCard.setAlignment(Pos.CENTER);
+		newCard.minHeight(140.0);
+		newCard.minWidth(110.0);
+		
+		DropShadow shadow = new DropShadow();
+		shadow.setHeight(8.0);
+		shadow.setRadius(3.5);
+		shadow.setWidth(8.0);
+		newCard.setEffect(shadow);
+		
+		Label cardText = new Label(this.toString());
+		cardText.setFont(new Font(36.0));
+		cardText.setTextAlignment(TextAlignment.CENTER);
+		if (this.suit == 'H' || this.suit == 'D') {
+			cardText.setTextFill(Color.RED);
 		}
 
-		return suit + face;
+		newCard.getChildren().add(cardText);
+
+		return newCard;
 	}
 }

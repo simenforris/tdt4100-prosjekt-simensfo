@@ -13,129 +13,25 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<HBox fx:controller="poker.fxui.Controller" maxHeight="700.0" maxWidth="1100.0" minHeight="700.0" minWidth="1100.0" prefHeight="700.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<HBox maxHeight="700.0" maxWidth="1100.0" minHeight="700.0" minWidth="1100.0" prefHeight="700.0" prefWidth="1100.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="poker.fxui.Controller">
    <children>
       <VBox prefHeight="700.0" prefWidth="820.0" style="-fx-background-color: #76BB78;">
          <children>
-            <BorderPane minHeight="-Infinity" prefHeight="498.0">
+            <BorderPane fx:id="board" minHeight="-Infinity" prefHeight="498.0">
                <padding>
                   <Insets bottom="10.0" top="10.0" />
                </padding>
-               <bottom>
-                  <GridPane fx:id="playerPlay" hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="360.0" vgap="5.0" BorderPane.alignment="CENTER">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints maxHeight="80.0" minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="195.0" minHeight="10.0" prefHeight="172.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Your Play" textAlignment="CENTER" wrappingWidth="99.13671875" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Text>
-                        <Pane prefHeight="170.0" prefWidth="140.0" style="-fx-background-color: white; -fx-background-radius: 10;" GridPane.rowIndex="1">
-                           <children>
-                              <Text layoutX="31.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A S" textAlignment="CENTER">
-                                 <font>
-                                    <Font size="36.0" />
-                                 </font>
-                              </Text>
-                           </children>
-                           <effect>
-                              <DropShadow height="8.0" radius="3.5" width="8.0" />
-                           </effect>
-                        </Pane>
-                        <Pane prefHeight="170.0" prefWidth="140.0" style="-fx-background-color: white; -fx-background-radius: 10;" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                           <children>
-                              <Text layoutX="31.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A S" textAlignment="CENTER">
-                                 <font>
-                                    <Font size="36.0" />
-                                 </font>
-                              </Text>
-                           </children>
-                           <effect>
-                              <DropShadow height="8.0" radius="3.5" width="8.0" />
-                           </effect>
-                        </Pane>
-                        <Pane prefHeight="170.0" prefWidth="140.0" style="-fx-background-color: white; -fx-background-radius: 10;" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                           <children>
-                              <Text layoutX="31.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A S" textAlignment="CENTER">
-                                 <font>
-                                    <Font size="36.0" />
-                                 </font>
-                              </Text>
-                           </children>
-                           <effect>
-                              <DropShadow height="8.0" radius="3.5" width="8.0" />
-                           </effect>
-                        </Pane>
-                     </children>
-                  </GridPane>
-               </bottom>
-               <top>
-                  <GridPane fx:id="computerPlay" hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="360.0" vgap="5.0" BorderPane.alignment="CENTER">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints maxHeight="182.0" minHeight="10.0" prefHeight="174.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="80.0" minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
-                     </rowConstraints>
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Computer Play" textAlignment="CENTER" wrappingWidth="158.13671875" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Text>
-                        <Pane prefHeight="170.0" prefWidth="140.0" style="-fx-background-color: white; -fx-background-radius: 10;">
-                           <children>
-                              <Text layoutX="31.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A S" textAlignment="CENTER">
-                                 <font>
-                                    <Font size="36.0" />
-                                 </font>
-                              </Text>
-                           </children>
-                           <effect>
-                              <DropShadow height="8.0" radius="3.5" width="8.0" />
-                           </effect>
-                        </Pane>
-                        <Pane prefHeight="170.0" prefWidth="140.0" style="-fx-background-color: white; -fx-background-radius: 10;" GridPane.columnIndex="1">
-                           <children>
-                              <Text layoutX="31.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A S" textAlignment="CENTER">
-                                 <font>
-                                    <Font size="36.0" />
-                                 </font>
-                              </Text>
-                           </children>
-                           <effect>
-                              <DropShadow height="8.0" radius="3.5" width="8.0" />
-                           </effect>
-                        </Pane>
-                        <Pane prefHeight="170.0" prefWidth="140.0" style="-fx-background-color: white; -fx-background-radius: 10;" GridPane.columnIndex="2">
-                           <children>
-                              <Text layoutX="31.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A S" textAlignment="CENTER">
-                                 <font>
-                                    <Font size="36.0" />
-                                 </font>
-                              </Text>
-                           </children>
-                           <effect>
-                              <DropShadow height="8.0" radius="3.5" width="8.0" />
-                           </effect>
-                        </Pane>
-                     </children>
-                  </GridPane>
-               </top>
+               <left>
+			     <Pane managed="false" layoutY="230" layoutX="10">
+				  <Button fx:id="playButton" mnemonicParsing="false" onAction="#commitPlay" text="Commit Play" textAlignment="CENTER" BorderPane.alignment="CENTER">
+					<font>
+						<Font size="18.0" />
+					</font>
+				  </Button>
+				 </Pane>
+               </left>
                <center>
-                  <Text fx:id="winnerText" strokeType="OUTSIDE" strokeWidth="0.0" text="Computer Wins" textAlignment="CENTER" BorderPane.alignment="CENTER">
+                  <Text fx:id="infoText" strokeType="OUTSIDE" strokeWidth="0.0" text="Play 3 Cards" textAlignment="CENTER" BorderPane.alignment="CENTER">
                      <font>
                         <Font size="36.0" />
                      </font>
@@ -270,17 +166,22 @@
                       <RowConstraints maxHeight="165.0" minHeight="10.0" prefHeight="95.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Button fx:id="rulesButton" mnemonicParsing="false" prefWidth="115.0" text="Rules" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                        <Button fx:id="rulesButton" mnemonicParsing="false" onAction="#showRules" prefWidth="115.0" text="Rules" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Button>
-                        <Button fx:id="saveButton" mnemonicParsing="false" text="Save Game" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                        <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveGame" text="Save Game" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Button>
-                        <Button fx:id="loadButton" mnemonicParsing="false" text="Load Game" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                        <Button fx:id="loadButton" mnemonicParsing="false" onAction="#loadGame" text="Load Game" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="newGameButton" mnemonicParsing="false" onAction="#newGame" prefWidth="115.0" text="New Game" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                            <font>
                               <Font size="18.0" />
                            </font>
