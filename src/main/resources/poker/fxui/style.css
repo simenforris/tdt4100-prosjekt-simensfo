@@ -1,0 +1,9 @@
+.card {
+	-fx-background-radius: 10;
+	-fx-background-color: white;
+}
+
+.card.inhand:hover, .card.inhand.selected {
+	-fx-border-color: blue;
+	-fx-border-radius: 10;
+}

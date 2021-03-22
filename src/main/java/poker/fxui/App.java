@@ -14,6 +14,8 @@ public class App extends Application {
 		
 		Scene scene = new Scene(parent);
 
+		scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+
 		stage.setTitle("War Poker");
 		stage.setScene(scene);
 		stage.show();
