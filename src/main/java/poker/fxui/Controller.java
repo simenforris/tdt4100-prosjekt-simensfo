@@ -1,5 +1,6 @@
 package poker.fxui;
 
+import java.util.LinkedList;
 import java.util.Stack;
 
 import javafx.event.EventHandler;
@@ -54,7 +55,6 @@ public class Controller {
 	@FXML
 	private Button loadButton;
 
-	// Maybe add settings to change handsize and number of decks
 	private int handSize;
 	private int round;
 	private Deck deck;
@@ -65,6 +65,7 @@ public class Controller {
 	private Stack<Card> warCards;
 	private Play playerPlay;
 	private Play computerPlay;
+	private LinkedList<Card> selectedCards;
 
 	@FXML
 	private void newGame() {
@@ -77,8 +78,12 @@ public class Controller {
 		this.playerWon = new Stack<Card>();
 		this.computerWon = new Stack<Card>();
 		this.warCards = new Stack<Card>();
-		this.playerPlay = new Play();
-		this.computerPlay = new Play();
+		this.playerPlay = new Play("Player Play:", true);
+		this.computerPlay = new Play("Computer Play:", false);
+		this.selectedCards = new LinkedList<Card>();
+
+		this.playButton.setDisable(true);
+		this.infoText.setText("");
 
 		refillHands();
 	
@@ -91,24 +96,33 @@ public class Controller {
 		this.computerWonCount.setText("Computer Won: " + String.valueOf(this.computerWon.size()));
 		this.warCardsCount.setText("War Cards: " + String.valueOf(this.warCards.size()));
 
-		this.infoText.setText("");
 
 		this.hand.getChildren().clear();
 		for (int i = 0; i < playerHand.size(); i++) {
-			VBox card = this.playerHand.getCard(i).model();
-			card.getStyleClass().add("inhand");
-			card.setId("cardInHand-" + i);
-			card.setOnMouseClicked(new EventHandler<MouseEvent>(){
+			Card card = this.playerHand.getCard(i);
+
+			VBox cardModel = card.getModel();
+			cardModel.getStyleClass().add("inhand");
+			cardModel.setId("cardInHand-" + i);
+			cardModel.setOnMouseClicked(new EventHandler<MouseEvent>(){
 				@Override
 				public void handle(MouseEvent event) {
-					if (card.getStyleClass().contains("selected")) {
-						card.getStyleClass().remove("selected");
+					if (cardModel.getStyleClass().contains("selected")) {
+						cardModel.getStyleClass().remove("selected");
+						selectedCards.remove(card);
 					} else {
-						card.getStyleClass().add("selected");
+						cardModel.getStyleClass().add("selected");
+						if (selectedCards.size() == 3) {
+							VBox firstCard = selectedCards.getFirst().getModel();
+							firstCard.getStyleClass().remove("selected");
+							selectedCards.removeFirst();
+						}
+						selectedCards.add(card);
 					}
+					playButton.setDisable(! (selectedCards.size() == 3));
 				}
 			});
-			this.hand.add(card, i, 0);
+			this.hand.add(cardModel, i, 0);
 		}
 	}
 
@@ -124,11 +138,44 @@ public class Controller {
 	}
 
 	@FXML
+	private void commitPlay() {
+		this.computerPlay.clear();
+		this.playerPlay.clear();
+		
+		// Computer makes its play
+		for (Card card : selectedCards) {
+			Card cardToPlay = playerHand.playCard(card);
+			VBox cardModel = cardToPlay.getModel();
+			cardModel.getStyleClass().remove("inhand");
+			cardModel.setOnMouseClicked(null);
+
+			this.hand.getChildren().remove(cardModel);
+			playerPlay.push(cardToPlay);
+
+			computerPlay.push(deck.draw());
+		}
+
+		this.computerPlay.updateModel();
+		this.playerPlay.updateModel();
+
+		this.board.setTop(computerPlay.getModel());
+		this.board.setBottom(playerPlay.getModel());
+		this.infoText.setText("Someone Wins");
+
+		if (this.playButton.getText() == "Continue") {
+			this.playButton.setText("Commit Play");
+		} else {
+			this.playButton.setText("Continue");		
+		}
+	}
+
+	@FXML
 	void initialize() {
 		newGame();
 
 		this.infoText.setText("Play 3 Cards");
 	}
+
 
 	@FXML
 	private void showRules() {
@@ -146,25 +193,5 @@ public class Controller {
 	private void loadGame() {
 		// Load gamestate from file
 		System.out.println("Load game");
-	}
-
-	@FXML
-	private void commitPlay() {
-		this.computerPlay.clear();
-		this.playerPlay.clear();
-		for (int i = 0; i < 3; i++) {
-			this.computerPlay.push(deck.draw());
-			this.playerPlay.push(deck.draw());
-		}
-
-		this.board.setTop(computerPlay.model("Computer Play:", false));
-		this.board.setBottom(playerPlay.model("Player Play:", true));
-		this.infoText.setText("Someone Wins");;
-
-		if (this.playButton.getText() == "Continue") {
-			this.playButton.setText("Commit Play");
-		} else {
-			this.playButton.setText("Continue");		
-		}
 	}
 }
