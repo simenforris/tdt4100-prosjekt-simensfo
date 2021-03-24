@@ -3,7 +3,14 @@
 	-fx-background-color: white;
 }
 
-.card.inhand:hover, .card.inhand.selected {
+.card.inhand:hover, .card.inhand.selected:hover {
 	-fx-border-color: blue;
 	-fx-border-radius: 10;
+	-fx-border-width: 3;
+}
+
+.card.inhand.selected {
+	-fx-border-color: blue;
+	-fx-border-radius: 10;
+	-fx-border-width: 2;
 }
