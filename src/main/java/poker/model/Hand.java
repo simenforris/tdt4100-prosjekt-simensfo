@@ -24,10 +24,22 @@ public class Hand {
 		return this.cards[i];
 	}
 
+	public int getCard(Card card) {
+		return Arrays.asList(this.cards).indexOf(card);
+	}
+
 	public Card playCard(int i) {
 		Card card = this.cards[i];
 		this.cards[i] = null;
 		return card;
+	}
+
+	// Må ha error handling
+	public Card playCard(Card card) {
+		int index = getCard(card);
+		Card cardToPlay = this.cards[index];
+		this.cards[index] = null;
+		return cardToPlay;
 	}
 
 	@Override
