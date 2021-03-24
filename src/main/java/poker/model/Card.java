@@ -11,6 +11,7 @@ import javafx.scene.text.TextAlignment;
 public class Card {
 	private final char suit;
 	private final int face;
+	private VBox model;
 
 	public Card(char suit, int face) throws IllegalArgumentException {
 		if (!(suit == 'S' || suit == 'H' || suit == 'D' || suit == 'C')) {
@@ -20,6 +21,28 @@ public class Card {
 		}
 		this.suit = suit;
 		this.face = face;
+
+		// Create model of card
+		this.model = new VBox();
+		this.model.getStyleClass().add("card");
+		this.model.setAlignment(Pos.CENTER);
+		this.model.minHeight(140.0);
+		this.model.minWidth(110.0);
+		
+		DropShadow shadow = new DropShadow();
+		shadow.setHeight(8.0);
+		shadow.setRadius(3.5);
+		shadow.setWidth(8.0);
+		this.model.setEffect(shadow);
+		
+		Label cardText = new Label(this.toString());
+		cardText.setFont(new Font(36.0));
+		cardText.setTextAlignment(TextAlignment.CENTER);
+		if (this.suit == 'H' || this.suit == 'D') {
+			cardText.setTextFill(Color.RED);
+		}
+
+		this.model.getChildren().add(cardText);
 	}
 
 	public char getSuit() {
@@ -28,6 +51,10 @@ public class Card {
 
 	public int getFace() {
 		return this.face;
+	}
+
+	public VBox getModel() {
+		return this.model;
 	}
 
 	@Override
@@ -69,30 +96,5 @@ public class Card {
 				break;
 		}
 		return suit + face;
-	}
-
-	public VBox model() {
-		VBox newCard = new VBox();
-		newCard.getStyleClass().add("card");
-		newCard.setAlignment(Pos.CENTER);
-		newCard.minHeight(140.0);
-		newCard.minWidth(110.0);
-		
-		DropShadow shadow = new DropShadow();
-		shadow.setHeight(8.0);
-		shadow.setRadius(3.5);
-		shadow.setWidth(8.0);
-		newCard.setEffect(shadow);
-		
-		Label cardText = new Label(this.toString());
-		cardText.setFont(new Font(36.0));
-		cardText.setTextAlignment(TextAlignment.CENTER);
-		if (this.suit == 'H' || this.suit == 'D') {
-			cardText.setTextFill(Color.RED);
-		}
-
-		newCard.getChildren().add(cardText);
-
-		return newCard;
 	}
 }

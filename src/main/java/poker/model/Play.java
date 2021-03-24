@@ -13,9 +13,20 @@ import javafx.scene.text.TextAlignment;
 
 public class Play {
 	private Stack<Card> cards;
+	private String label;
+	private Boolean textOnTop;
+	private GridPane model;
 
-	public Play() {
+	public Play(String label, boolean textOnTop) {
 		this.cards = new Stack<Card>();
+		this.label = label;
+		this.textOnTop = textOnTop;
+
+		updateModel();
+	}
+
+	public GridPane getModel() {
+		return this.model;
 	}
 
 	public void push(Card card) {
@@ -30,12 +41,12 @@ public class Play {
 		return this.cards.pop();
 	}
 
-	public GridPane model(String label, boolean textOnTop) {
-		GridPane play = new GridPane();
-		play.setMinSize(360.0, 200.0);
-		play.setVgap(5.0);
-		play.setHgap(5.0);
-		play.setAlignment(Pos.CENTER);
+	public void updateModel() {
+		this.model = new GridPane();
+		this.model.setMinSize(360.0, 200.0);
+		this.model.setVgap(5.0);
+		this.model.setHgap(5.0);
+		this.model.setAlignment(Pos.CENTER);
 		ColumnConstraints col1 = new ColumnConstraints();
 		col1.setPrefWidth(110.0);
 		col1.setHalignment(HPos.CENTER);
@@ -43,7 +54,7 @@ public class Play {
 		col2.setPrefWidth(110.0);
 		ColumnConstraints col3 = new ColumnConstraints();
 		col3.setPrefWidth(110.0);
-		play.getColumnConstraints().addAll(col1, col2, col3);
+		this.model.getColumnConstraints().addAll(col1, col2, col3);
 
 
 		Label text = new Label(label);
@@ -60,16 +71,14 @@ public class Play {
 		int cardRow = textOnTop ? 1 : 0;
 
 		if (textOnTop) {
-			play.getRowConstraints().addAll(row1, row2);
+			this.model.getRowConstraints().addAll(row1, row2);
 		} else {
-			play.getRowConstraints().addAll(row2, row1);
+			this.model.getRowConstraints().addAll(row2, row1);
 		}
 
-		play.add(text, 0, textRow, 3, 1);
+		this.model.add(text, 0, textRow, 3, 1);
 		for (int i = 0; i < this.cards.size(); i++) {
-			play.add(this.cards.get(i).model(), i, cardRow);
+			this.model.add(this.cards.get(i).getModel(), i, cardRow);
 		}
-
-		return play;
 	}
 }
