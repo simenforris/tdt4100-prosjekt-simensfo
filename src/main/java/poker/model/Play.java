@@ -1,5 +1,6 @@
 package poker.model;
 
+import java.util.Arrays;
 import java.util.Stack;
 
 import javafx.geometry.HPos;
@@ -25,6 +26,14 @@ public class Play {
 		updateModel();
 	}
 
+	public Card getCard(int i) {
+		return this.cards.get(i);
+	}
+
+	public int size() {
+		return this.cards.size();
+	}
+
 	public GridPane getModel() {
 		return this.model;
 	}
@@ -39,6 +48,49 @@ public class Play {
 
 	public Card pop() {
 		return this.cards.pop();
+	}
+
+	// Score calculation
+	private int checkSuits() {
+		if (getCard(0).getSuit() == getCard(1).getSuit() 
+			&& getCard(1).getSuit() == getCard(2).getSuit()) {
+			// Flush
+			return 3;
+		} else {
+			return 1;
+		}
+	}
+
+	private int checkFaces() {
+		int arr[] = {getCard(0).getFace(), getCard(1).getFace(), getCard(2).getFace()};
+		Arrays.sort(arr);
+		if (arr[0] == arr[1]
+			&& arr[1] == arr[2]) {
+			// Three of a kind
+			return 5;
+		} else if (arr[0] + 1 == arr[1] && arr[1] + 1 == arr[2]) {
+			// Straight
+			return 4;
+		} else if (arr[0] == arr[1]
+			|| arr[1] == arr[2]
+			|| arr[0] == arr[2]) {
+			// Two of a kind
+			return 2;
+		} else {
+			// Nothing
+			return 1;
+		}
+	}
+
+	public int getScore() {
+		int f = checkFaces();
+		int s = checkSuits();
+		if (f == 4 && s == 3) {
+			// Straight Flush
+			return 6;
+		} else {
+			return Math.max(f, s);
+		}
 	}
 
 	public void updateModel() {
@@ -80,5 +132,10 @@ public class Play {
 		for (int i = 0; i < this.cards.size(); i++) {
 			this.model.add(this.cards.get(i).getModel(), i, cardRow);
 		}
+	}
+
+	@Override
+	public String toString() {
+		return this.cards.toString();
 	}
 }
