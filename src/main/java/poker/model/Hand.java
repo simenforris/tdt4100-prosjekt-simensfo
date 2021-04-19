@@ -3,7 +3,7 @@ package poker.model;
 import java.util.Arrays;
 
 public class Hand {
-	private Card[] cards;
+	protected Card[] cards;
 
 	public Hand(int handSize) throws IllegalArgumentException {
 		if (handSize < 3) {
