@@ -1,24 +1,35 @@
 package poker.fxui;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
-import java.util.Stack;
+import java.util.Map;
 
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import poker.model.Card;
-import poker.model.Deck;
-import poker.model.Hand;
-import poker.model.Play;
-
+import poker.model.PokerGame;
 
 public class Controller {
+	@FXML
+	private HBox pokerView;
+
 	@FXML
 	private BorderPane board;
 
@@ -50,60 +61,65 @@ public class Controller {
 	private Button newGameButton;
 
 	@FXML
+	private Text saveInfo;
+
+	@FXML
 	private Button saveButton;
 
 	@FXML
 	private Button loadButton;
 
-	private int handSize;
-	private int round;
-	private Deck deck;
-	private Hand playerHand;
-	private Hand computerHand;
-	private Stack<Card> playerWon;
-	private Stack<Card> computerWon;
-	private Stack<Card> warCards;
-	private Play playerPlay;
-	private Play computerPlay;
+	// Just to keep handsize synced if it is ever changed
+	private final static int handSize = 5;
+	private final static Map<String, String> winnerText = Map.of("player", "You Win!", "computer", "Computer Wins!", "tie", "Its a Tie!");
+
+	private final FileSupport fileSupport = new FileSupport();
+
 	private LinkedList<Card> selectedCards;
+	private PokerGame game;
 
 	@FXML
 	private void newGame() {
-		this.handSize = 5;
-		this.round = 1;
-		this.deck = new Deck();
-		this.deck.shuffle();
-		this.playerHand = new Hand(handSize);
-		this.computerHand = new Hand(handSize);
-		this.playerWon = new Stack<Card>();
-		this.computerWon = new Stack<Card>();
-		this.warCards = new Stack<Card>();
-		this.playerPlay = new Play("Player Play:", true);
-		this.computerPlay = new Play("Computer Play:", false);
 		this.selectedCards = new LinkedList<Card>();
+		this.game = new PokerGame(handSize);
 
 		this.playButton.setDisable(true);
 		this.infoText.setText("");
 
-		refillHands();
+		this.game.refillHands();
 	
 		updateBoard();
 	}
 
-	private void updateBoard() {
-		this.roundCounter.setText("Round: " + String.valueOf(this.round));
-		this.playerWonCount.setText("Player Won: " + String.valueOf(this.playerWon.size()));
-		this.computerWonCount.setText("Computer Won: " + String.valueOf(this.computerWon.size()));
-		this.warCardsCount.setText("War Cards: " + String.valueOf(this.warCards.size()));
+	private void nextRound() {
+		this.game.nextRound();
+		this.game.refillHands();
 
+		this.playButton.setText("Commit Play");
+		this.playButton.setDisable(true);
+		this.infoText.setText("");
+
+		updateBoard();
+	}
+
+	private void updateBoard() {
+		// Gjør denne mer generisk. Er mer "gjør klar board for nytt game"
+		this.roundCounter.setText("Round: " + String.valueOf(this.game.getRound()));
+		this.playerWonCount.setText("Player Won: " + String.valueOf(this.game.getPlayerWon().size()));
+		this.computerWonCount.setText("Computer Won: " + String.valueOf(this.game.getComputerWon().size()));
+		this.warCardsCount.setText("War Cards: " + String.valueOf(this.game.getWarCards().size()));
+		this.infoText.setText("Play 3 Cards");
+		this.saveInfo.setText("");
+
+		this.board.setTop(null);
+		this.board.setBottom(null);
 
 		this.hand.getChildren().clear();
-		for (int i = 0; i < playerHand.size(); i++) {
-			Card card = this.playerHand.getCard(i);
+		for (int i = 0; i < this.game.getPlayerHand().size(); i++) {
+			Card card = this.game.getPlayerHand().getCard(i);
 
 			VBox cardModel = card.getModel();
 			cardModel.getStyleClass().add("inhand");
-			cardModel.setId("cardInHand-" + i);
 			cardModel.setOnMouseClicked(new EventHandler<MouseEvent>(){
 				@Override
 				public void handle(MouseEvent event) {
@@ -126,72 +142,129 @@ public class Controller {
 		}
 	}
 
-	private void refillHands() {
-		for (int i = 0; i < this.handSize; i++) {
-			if (this.playerHand.getCard(i) == null) {
-				this.playerHand.addCard(i, this.deck.draw());
+	@FXML
+	private void commitPlay() {
+		// Not really a good way to determine button function
+		if (this.selectedCards.size() == 3) {
+		
+			for (Node card : hand.getChildren()) {
+				card.getStyleClass().remove("inhand");
+				card.setOnMouseClicked(null);
 			}
-			if (this.computerHand.getCard(i) == null) {
-				this.computerHand.addCard(i, this.deck.draw());
+
+			this.game.makePlays(selectedCards);
+
+			for (int i = 0; i < this.game.getPlayerPlay().size(); i++) {
+				this.hand.getChildren().remove(this.game.getPlayerPlay().getCard(i).getModel());				
+			}
+			selectedCards.clear();
+
+			this.board.setTop(this.game.getComputerPlay().getModel());
+			this.board.setBottom(this.game.getPlayerPlay().getModel());
+
+			this.game.calculateWinner();
+			infoText.setText(winnerText.get(this.game.getWinner()));
+			this.playButton.setText("Continue");
+		} else {
+
+			if (this.game.getRound() == 8) {
+				gameOver();
+			} else {
+				nextRound();
 			}
 		}
 	}
 
-	@FXML
-	private void commitPlay() {
-		this.computerPlay.clear();
-		this.playerPlay.clear();
-		
-		// Computer makes its play
-		for (Card card : selectedCards) {
-			Card cardToPlay = playerHand.playCard(card);
-			VBox cardModel = cardToPlay.getModel();
-			cardModel.getStyleClass().remove("inhand");
-			cardModel.setOnMouseClicked(null);
+	private void gameOver() {
+		this.board.setTop(null);
+		this.board.setBottom(null);
+		this.board.setLeft(null);
+		this.infoText.setText(this.game.getPlayerWon().size() > this.game.getComputerWon().size() ? "Game Over. You Win!" : "Game Over. Computer Wins!");
 
-			this.hand.getChildren().remove(cardModel);
-			playerPlay.push(cardToPlay);
+		Button newGameButton = new Button();
+		newGameButton.setText("newGame");
+		newGameButton.onActionProperty().set(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent event) {
+				newGame();
+			};
+		});
+		newGameButton.setFont(new Font(18));
 
-			computerPlay.push(deck.draw());
-		}
-
-		this.computerPlay.updateModel();
-		this.playerPlay.updateModel();
-
-		this.board.setTop(computerPlay.getModel());
-		this.board.setBottom(playerPlay.getModel());
-		this.infoText.setText("Someone Wins");
-
-		if (this.playButton.getText() == "Continue") {
-			this.playButton.setText("Commit Play");
-		} else {
-			this.playButton.setText("Continue");		
-		}
+		this.board.setBottom(newGameButton);
 	}
 
 	@FXML
 	void initialize() {
 		newGame();
-
-		this.infoText.setText("Play 3 Cards");
 	}
-
 
 	@FXML
 	private void showRules() {
-		// Show popup-window explaining game rules
-		System.out.println("Show rules");
+		Stage rootStage, rulesStage;
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Rules.fxml"));
+		try {
+			rulesStage = fxmlLoader.load();
+			rootStage = (Stage) pokerView.getScene().getWindow();
+			rulesStage.initOwner(rootStage);
+			rulesStage.initModality(Modality.APPLICATION_MODAL);
+			rulesStage.showAndWait();
+
+		} catch(final IOException e) {
+			System.out.println(e);
+		}
+	}
+
+	private FileChooser fileChooser;
+
+	private String browseFileLocation(final boolean isSave) {
+		if (fileChooser == null) {
+			fileChooser = new FileChooser();
+			fileSupport.ensureUserFolder();
+			fileChooser.setInitialDirectory(fileSupport.getUserFolderPath().toFile());
+			fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("WarPoker save files (*." + FileSupport.EXTENSION + ")", "*." + FileSupport.EXTENSION));
+		}
+		final Window window = pokerView.getScene().getWindow();
+		File file = null;
+		if (isSave) {
+			fileChooser.setInitialFileName(fileSupport.getSaveFileName());
+			file = fileChooser.showSaveDialog(window);
+		} else {
+			file = fileChooser.showOpenDialog(window);
+		}
+		
+		if (file != null) {
+			return file.getPath();
+		}
+		return null;
 	}
 
 	@FXML
 	private void saveGame() {
-		// Save gamestate to file
-		System.out.println("Save game");
+		String name = browseFileLocation(true);
+		if (! (name == null || name.isBlank())) {
+			try {
+				fileSupport.writeSaveFile(this.game, name);
+				this.saveInfo.setText("Saved game to file: " + name.substring(name.lastIndexOf("\\") + 1));
+			} catch (final IOException e) {
+				System.out.println(e);
+			}
+		}
 	}
 
 	@FXML
 	private void loadGame() {
-		// Load gamestate from file
-		System.out.println("Load game");
+		String name = browseFileLocation(false);
+		PokerGame loadedGame = null;
+		if (! (name == null || name.isBlank())) {
+			try {
+				loadedGame = fileSupport.readSaveFile(name);
+				this.game = loadedGame;
+				updateBoard();
+				this.saveInfo.setText("Loaded save file: " + name.substring(name.lastIndexOf("\\") + 1));
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+		}
 	}
 }
