@@ -105,7 +105,7 @@ public class PokerGame implements Serializable {
 				playerWon.push(computerPlay.pop());
 			}
 			while (warCards.size() > 0) {
-				computerWon.push(warCards.pop());
+				playerWon.push(warCards.pop());
 			}
 		} else if (computerScore > playerScore) {
 			winner = "computer";
