@@ -23,17 +23,6 @@ public class Deck implements Serializable {
 		}
 	}
 
-	public Deck(boolean noModel) {
-		this.cards = new Stack<Card>();
-
-		int n = 13;
-		for (int i = 0; i < suits.length; i++) {
-			for (int j = 0; j < n; j++) {
-				this.cards.push(new Card(suits[i], j + 1, noModel));
-			}
-		}
-	}
-
 	public int size() {
 		return this.cards.size();
 	}

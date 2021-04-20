@@ -17,7 +17,7 @@ public class PokerGameTest {
 
 	@BeforeEach
 	public void setUp() {
-		game = new PokerGame(handSize, true);
+		game = new PokerGame(handSize);
 	}
 
 	@Test
@@ -40,25 +40,25 @@ public class PokerGameTest {
 		LinkedList<Card> selectedCards = new LinkedList<Card>();
 
 		Hand playerHand = game.getPlayerHand();
-		Card[] playCards = {new Card('S', 11, true), new Card('C', 12, true), new Card('D', 13, true)};
+		Card[] playCards = {new Card('S', 11), new Card('C', 12), new Card('D', 13)};
 		playerHand.addCard(0, playCards[0]);
 		playerHand.addCard(1, playCards[1]);
 		playerHand.addCard(2, playCards[2]);
-		playerHand.addCard(3, new Card('S', 2, true));
-		playerHand.addCard(4, new Card('D', 1, true));
+		playerHand.addCard(3, new Card('S', 2));
+		playerHand.addCard(4, new Card('D', 1));
 		for (Card card : playCards) {
 			selectedCards.add(card);
 		}
 
 		Hand computerHand = game.getComputerHand();
-		Card[] comCards = {new Card('H', 6, true), new Card('H', 8, true), new Card('H', 11, true)};
+		Card[] comCards = {new Card('H', 6), new Card('H', 8), new Card('H', 11)};
 		computerHand.addCard(0, comCards[0]);
 		computerHand.addCard(1, comCards[1]);
 		computerHand.addCard(2, comCards[2]);
-		computerHand.addCard(3, new Card('C', 2, true));
-		computerHand.addCard(4, new Card('S', 1, true));
+		computerHand.addCard(3, new Card('C', 2));
+		computerHand.addCard(4, new Card('S', 1));
 
-		game.makePlays(selectedCards, true);
+		game.makePlays(selectedCards);
 		Play playerPlay = game.getPlayerPlay();
 		for (int i = 0; i < playerPlay.size(); i++) {
 			assertTrue(Arrays.asList(playCards).contains(playerPlay.getCard(i)));
@@ -75,14 +75,14 @@ public class PokerGameTest {
 	public void testCalculateWinner() {
 		// Test Player win
 		Play playerPlay = game.getPlayerPlay();
-		playerPlay.push(new Card('S', 11, true));
-		playerPlay.push(new Card('C', 12, true));
-		playerPlay.push(new Card('D', 13, true));
+		playerPlay.push(new Card('S', 11));
+		playerPlay.push(new Card('C', 12));
+		playerPlay.push(new Card('D', 13));
 
 		Play computerPlay = game.getComputerPlay();
-		computerPlay.push(new Card('H', 6, true));
-		computerPlay.push(new Card('H', 8, true));
-		computerPlay.push(new Card('H', 11, true));
+		computerPlay.push(new Card('H', 6));
+		computerPlay.push(new Card('H', 8));
+		computerPlay.push(new Card('H', 11));
 
 		game.calculateWinner();
 		assertTrue(game.getWinner() == "player");
@@ -94,13 +94,13 @@ public class PokerGameTest {
 		computerPlay.clear();
 
 		// Test Tie
-		playerPlay.push(new Card('S', 10, true));
-		playerPlay.push(new Card('S', 2, true));
-		playerPlay.push(new Card('S', 5, true));
+		playerPlay.push(new Card('S', 10));
+		playerPlay.push(new Card('S', 2));
+		playerPlay.push(new Card('S', 5));
 
-		computerPlay.push(new Card('C', 1, true));
-		computerPlay.push(new Card('C', 8, true));
-		computerPlay.push(new Card('C', 3, true));
+		computerPlay.push(new Card('C', 1));
+		computerPlay.push(new Card('C', 8));
+		computerPlay.push(new Card('C', 3));
 
 		game.calculateWinner();
 		assertTrue(game.getWinner() == "tie");
@@ -112,13 +112,13 @@ public class PokerGameTest {
 		computerPlay.clear();
 
 		// Test Computer win
-		playerPlay.push(new Card('S', 2, true));
-		playerPlay.push(new Card('H', 8, true));
-		playerPlay.push(new Card('D', 9, true));
+		playerPlay.push(new Card('S', 2));
+		playerPlay.push(new Card('H', 8));
+		playerPlay.push(new Card('D', 9));
 
-		computerPlay.push(new Card('D', 11, true));
-		computerPlay.push(new Card('D', 12, true));
-		computerPlay.push(new Card('C', 13, true));
+		computerPlay.push(new Card('D', 11));
+		computerPlay.push(new Card('D', 12));
+		computerPlay.push(new Card('C', 13));
 
 		game.calculateWinner();
 		assertTrue(game.getWinner() == "computer");

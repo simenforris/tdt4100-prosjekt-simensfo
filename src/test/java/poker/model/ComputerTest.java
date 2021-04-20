@@ -12,22 +12,22 @@ public class ComputerTest {
 	@DisplayName("Test Computer make play")
 	public void testMakePlay() {
 		Computer computer = new Computer(handSize);
-		Card card1 = new Card('C', 2, true);
-		Card card2 = new Card('C', 8, true);
-		Card card3 = new Card('C', 5, true);
-		Card card4 = new Card('H', 9, true);
-		Card card5 = new Card('S', 10, true);
+		Card card1 = new Card('C', 2);
+		Card card2 = new Card('C', 8);
+		Card card3 = new Card('C', 5);
+		Card card4 = new Card('H', 9);
+		Card card5 = new Card('S', 10);
 		Card[] cards = {card1, card2, card3, card4, card5};
 		for (int i = 0; i < computer.size(); i++) {
 			computer.addCard(i, cards[i]);
 		}
 
-		Play bestPlay = new Play(true);
+		Play bestPlay = new Play("Test", false);
 		bestPlay.push(card2);
 		bestPlay.push(card4);
 		bestPlay.push(card5);
 
-		Play computerPlay = computer.makePlay(true);
+		Play computerPlay = computer.makePlay();
 		
 		assertEquals(bestPlay.getScore(), computerPlay.getScore());
 	}

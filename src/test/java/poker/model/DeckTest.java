@@ -19,7 +19,7 @@ public class DeckTest {
 
 	@BeforeEach
 	public void setup() {
-		deck = new Deck(true);
+		deck = new Deck();
 	}
 
 	@Test

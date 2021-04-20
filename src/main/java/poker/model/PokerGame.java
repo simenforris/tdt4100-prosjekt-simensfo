@@ -33,20 +33,6 @@ public class PokerGame implements Serializable {
 		this.winner = "";
 	}
 
-	public PokerGame(int handSize, boolean noModel) {
-		this.round = 1;
-		this.deck = new Deck(noModel);
-		this.deck.shuffle();
-		this.playerHand = new Hand(handSize);
-		this.computerHand = new Computer(handSize);
-		this.playerWon = new Stack<Card>();
-		this.computerWon = new Stack<Card>();
-		this.warCards = new Stack<Card>();
-		this.playerPlay = new Play(noModel);
-		this.computerPlay = new Play(noModel);
-		this.winner = "";
-	}
-
 	public int getRound() {
 		return this.round;
 	}
@@ -100,15 +86,6 @@ public class PokerGame implements Serializable {
 
 	public void makePlays(LinkedList<Card> selectedCards) {
 		this.computerPlay = computerHand.makePlay();
-
-		for (Card card : selectedCards) {
-			Card cardToPlay = this.playerHand.playCard(card);
-			this.playerPlay.push(cardToPlay);
-		}
-	}
-
-	public void makePlays(LinkedList<Card> selectedCards, boolean noModel) {
-		this.computerPlay = computerHand.makePlay(noModel);
 
 		for (Card card : selectedCards) {
 			Card cardToPlay = this.playerHand.playCard(card);

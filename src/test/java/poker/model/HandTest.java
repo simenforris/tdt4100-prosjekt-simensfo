@@ -17,7 +17,7 @@ public class HandTest {
 
 	@BeforeEach
 	public void setup() {
-		deck = new Deck(true);
+		deck = new Deck();
 		deck.shuffle();
 	}
 

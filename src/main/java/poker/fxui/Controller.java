@@ -82,6 +82,8 @@ public class Controller {
 	// Initalizing fileSupport object
 	private final FileSupport fileSupport = new FileSupport();
 
+	private final ModelBuilder modelBuilder = new ModelBuilder();
+
 	// Linked list to keep track of selected cards in playerHand
 	private LinkedList<Card> selectedCards;
 	// The game data object
@@ -114,7 +116,7 @@ public class Controller {
 		for (int i = 0; i < this.game.getPlayerHand().size(); i++) {
 			Card card = this.game.getPlayerHand().getCard(i);
 
-			VBox cardModel = card.getModel();
+			VBox cardModel = card.getModel(modelBuilder);
 			cardModel.getStyleClass().add("inhand");
 			cardModel.setOnMouseClicked(new EventHandler<MouseEvent>(){
 				@Override
@@ -125,7 +127,7 @@ public class Controller {
 					} else {
 						cardModel.getStyleClass().add("selected");
 						if (selectedCards.size() == 3) {
-							VBox firstCard = selectedCards.getFirst().getModel();
+							VBox firstCard = selectedCards.getFirst().getModel(modelBuilder);
 							firstCard.getStyleClass().remove("selected");
 							selectedCards.removeFirst();
 						}
@@ -150,16 +152,13 @@ public class Controller {
 
 			this.game.makePlays(selectedCards);
 
-			this.game.getPlayerPlay().updateModel();
-			this.game.getComputerPlay().updateModel();
-
 			for (int i = 0; i < this.game.getPlayerPlay().size(); i++) {
-				this.hand.getChildren().remove(this.game.getPlayerPlay().getCard(i).getModel());				
+				this.hand.getChildren().remove(this.game.getPlayerPlay().getCard(i).getModel(modelBuilder));				
 			}
 			selectedCards.clear();
 
-			this.board.setTop(this.game.getComputerPlay().getModel());
-			this.board.setBottom(this.game.getPlayerPlay().getModel());
+			this.board.setTop(modelBuilder.buildModel(this.game.getComputerPlay()));
+			this.board.setBottom(modelBuilder.buildModel(this.game.getPlayerPlay()));
 
 			this.game.calculateWinner();
 			infoText.setText(winnerText.get(this.game.getWinner()));

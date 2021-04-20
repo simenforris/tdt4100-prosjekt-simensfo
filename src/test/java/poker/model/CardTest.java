@@ -19,7 +19,7 @@ public class CardTest {
 	@DisplayName("Test Card constructor")
 	public void testConstructor() {
 		for (int i = 0; i < 5; i++) {
-			var card = new Card(suits[random.nextInt(suits.length)], random.nextInt(13) + 1, true);
+			var card = new Card(suits[random.nextInt(suits.length)], random.nextInt(13) + 1);
 			assertTrue(Arrays.asList(suits).contains(card.getSuit()), "Card did not get right suit");
 			assertTrue(card.getFace() > 0 && card.getFace() < 14, "Card did not get right face");
 		}
