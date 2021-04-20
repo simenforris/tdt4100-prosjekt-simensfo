@@ -118,7 +118,7 @@
                               <Font size="18.0" />
                            </font>
                         </Button>
-                        <Button fx:id="newGameButton" mnemonicParsing="false" onAction="#newGame" prefWidth="115.0" text="New Game" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+                        <Button fx:id="newGameButton" mnemonicParsing="false" onAction="#initialize" prefWidth="115.0" text="New Game" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                            <font>
                               <Font size="18.0" />
                            </font>

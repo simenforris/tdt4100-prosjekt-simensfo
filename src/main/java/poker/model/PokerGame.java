@@ -72,10 +72,6 @@ public class PokerGame implements Serializable {
 		return this.winner;
 	}
 
-	public void nextRound() {
-		this.round++;
-	}
-
 	public void refillHands() {
 		for (int i = 0; i < this.playerHand.size(); i++) {
 			if (this.playerHand.getCard(i) == null) {
@@ -126,6 +122,11 @@ public class PokerGame implements Serializable {
 				warCards.push(computerPlay.pop());
 			}
 			winner = "tie";
+		}
+
+		this.round++;
+		if (round <= 8) {
+			refillHands();
 		}
 	}
 

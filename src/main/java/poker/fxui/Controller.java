@@ -1,10 +1,12 @@
 package poker.fxui;
 
+// Native java imports
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Map;
 
+// JavaFX imports
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -23,10 +25,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
+// Model import
 import poker.model.Card;
 import poker.model.PokerGame;
 
 public class Controller {
+	// Initializing all FXML components
 	@FXML
 	private HBox pokerView;
 
@@ -69,48 +73,38 @@ public class Controller {
 	@FXML
 	private Button loadButton;
 
-	// Just to keep handsize synced if it is ever changed
+	// A variable to keep handsize synced if it is ever changed
 	private final static int handSize = 5;
+	// Storing winner text in a map to display it without if-statements
 	private final static Map<String, String> winnerText = Map.of("player", "You Win!", "computer", "Computer Wins!", "tie", "Its a Tie!");
-
+	// Initalizing fileSupport object
 	private final FileSupport fileSupport = new FileSupport();
 
+	// Linked list to keep track of selected cards in playerHand
 	private LinkedList<Card> selectedCards;
+	// The game data object
 	private PokerGame game;
 
 	@FXML
-	private void newGame() {
+	private void initialize() {
 		this.selectedCards = new LinkedList<Card>();
 		this.game = new PokerGame(handSize);
-
-		this.playButton.setDisable(true);
-		this.infoText.setText("");
-
 		this.game.refillHands();
-	
-		updateBoard();
-	}
-
-	private void nextRound() {
-		this.game.nextRound();
-		this.game.refillHands();
-
-		this.playButton.setText("Commit Play");
-		this.playButton.setDisable(true);
-		this.infoText.setText("");
 
 		updateBoard();
 	}
 
 	private void updateBoard() {
-		// Gjør denne mer generisk. Er mer "gjør klar board for nytt game"
 		this.roundCounter.setText("Round: " + String.valueOf(this.game.getRound()));
 		this.playerWonCount.setText("Player Won: " + String.valueOf(this.game.getPlayerWon().size()));
 		this.computerWonCount.setText("Computer Won: " + String.valueOf(this.game.getComputerWon().size()));
 		this.warCardsCount.setText("War Cards: " + String.valueOf(this.game.getWarCards().size()));
 		this.infoText.setText("Play 3 Cards");
 		this.saveInfo.setText("");
-
+		this.playButton.setVisible(true);
+		this.playButton.setDisable(true);
+		this.playButton.setText("Commit Play");
+		
 		this.board.setTop(null);
 		this.board.setBottom(null);
 
@@ -166,11 +160,10 @@ public class Controller {
 			infoText.setText(winnerText.get(this.game.getWinner()));
 			this.playButton.setText("Continue");
 		} else {
-
-			if (this.game.getRound() == 8) {
-				gameOver();
+			if (this.game.getRound() <= 8) {
+				updateBoard();
 			} else {
-				nextRound();
+				gameOver();
 			}
 		}
 	}
@@ -178,25 +171,21 @@ public class Controller {
 	private void gameOver() {
 		this.board.setTop(null);
 		this.board.setBottom(null);
-		this.board.setLeft(null);
+		this.playButton.setVisible(false);
 		this.infoText.setText(this.game.getPlayerWon().size() > this.game.getComputerWon().size() ? "Game Over. You Win!" : "Game Over. Computer Wins!");
 
+		// Should be an exit button as well
 		Button newGameButton = new Button();
-		newGameButton.setText("newGame");
+		newGameButton.setText("New Game");
 		newGameButton.onActionProperty().set(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle(ActionEvent event) {
-				newGame();
+				initialize();
 			};
 		});
 		newGameButton.setFont(new Font(18));
 
 		this.board.setBottom(newGameButton);
-	}
-
-	@FXML
-	void initialize() {
-		newGame();
 	}
 
 	@FXML
@@ -217,6 +206,11 @@ public class Controller {
 
 	private FileChooser fileChooser;
 
+	/**
+	 * Function for browsing to save/load location
+	 * @param isSave are we saving or loading?
+	 * @return String representation of path to file
+	 */
 	private String browseFileLocation(final boolean isSave) {
 		if (fileChooser == null) {
 			fileChooser = new FileChooser();
