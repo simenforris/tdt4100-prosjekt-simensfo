@@ -30,7 +30,7 @@ public class Computer extends Hand {
 	public Play makePlay(Boolean noModel) {
 		Play[] plays = new Play[combinations.length];
 		for (int i = 0; i < combinations.length; i++) {
-			Play play = new Play();
+			Play play = new Play(true);
 			for (String j : combinations[i].split("")) {
 				play.push(cards[Integer.valueOf(j)]); 
 			}

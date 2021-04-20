@@ -21,7 +21,8 @@ public class Card implements Serializable {
 	public Card(char suit, int face) throws IllegalArgumentException {
 		if (!(suit == 'S' || suit == 'H' || suit == 'D' || suit == 'C')) {
 			throw new IllegalArgumentException("Card suit must be either S, H, D, or C");
-		} else if (!(face >= 1 && face <= 13)) {
+		}
+		if (!(face > 0 && face <= 13)) {
 			throw new IllegalArgumentException("Card face must be between 1 and 13");
 		}
 		this.suit = suit;

@@ -150,6 +150,9 @@ public class Controller {
 
 			this.game.makePlays(selectedCards);
 
+			this.game.getPlayerPlay().updateModel();
+			this.game.getComputerPlay().updateModel();
+
 			for (int i = 0; i < this.game.getPlayerPlay().size(); i++) {
 				this.hand.getChildren().remove(this.game.getPlayerPlay().getCard(i).getModel());				
 			}

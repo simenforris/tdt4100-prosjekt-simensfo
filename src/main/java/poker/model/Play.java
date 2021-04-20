@@ -31,7 +31,7 @@ public class Play implements Serializable {
 		updateModel();
 	}
 
-	public Play() {
+	public Play(boolean noModel) {
 		this.cards = new Stack<Card>();
 	}
 

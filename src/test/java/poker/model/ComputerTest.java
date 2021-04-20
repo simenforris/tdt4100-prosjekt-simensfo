@@ -22,7 +22,7 @@ public class ComputerTest {
 			computer.addCard(i, cards[i]);
 		}
 
-		Play bestPlay = new Play();
+		Play bestPlay = new Play(true);
 		bestPlay.push(card2);
 		bestPlay.push(card4);
 		bestPlay.push(card5);
