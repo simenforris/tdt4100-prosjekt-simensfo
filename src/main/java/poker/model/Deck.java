@@ -1,9 +1,13 @@
 package poker.model;
 
 import java.util.Stack;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Collections;
 
-public class Deck {
+public class Deck implements Serializable {
 	private Stack<Card> cards;
 	private final char[] suits = {'S', 'H', 'D', 'C'};
 
@@ -16,6 +20,14 @@ public class Deck {
 				this.cards.push(new Card(this.suits[i], j + 1));
 			}
 		}
+	}
+
+	public int size() {
+		return this.cards.size();
+	}
+
+	public Card getCard(int index) {
+		return this.cards.get(index);
 	}
 	
 	public void shuffle() {
@@ -33,5 +45,14 @@ public class Deck {
 	@Override
 	public String toString() {
 		return this.cards.toString();
+	}
+
+	@SuppressWarnings("unchecked")
+	private void readObject(ObjectInputStream input) throws ClassNotFoundException, IOException {
+		cards = (Stack<Card>) input.readObject();
+	}
+
+	private void writeObject(ObjectOutputStream output) throws IOException {
+		output.writeObject(cards);
 	}
 }

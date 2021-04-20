@@ -1,8 +1,12 @@
 package poker.model;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Arrays;
 
-public class Hand {
+public class Hand implements Serializable {
 	protected Card[] cards;
 
 	public Hand(int handSize) throws IllegalArgumentException {
@@ -45,5 +49,13 @@ public class Hand {
 	@Override
 	public String toString() {
 		return Arrays.toString(this.cards);
+	}
+
+	private void readObject(ObjectInputStream input) throws ClassNotFoundException, IOException {
+		cards = (Card[]) input.readObject();
+	}
+
+	private void writeObject(ObjectOutputStream output) throws IOException {
+		output.writeObject(cards);
 	}
 }

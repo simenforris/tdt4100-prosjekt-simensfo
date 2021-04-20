@@ -1,5 +1,10 @@
 package poker.model;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
@@ -8,9 +13,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
-public class Card {
-	private final char suit;
-	private final int face;
+public class Card implements Serializable {
+	private char suit;
+	private int face;
 	private VBox model;
 
 	public Card(char suit, int face) throws IllegalArgumentException {
@@ -22,27 +27,7 @@ public class Card {
 		this.suit = suit;
 		this.face = face;
 
-		// Create model of card
-		this.model = new VBox();
-		this.model.getStyleClass().add("card");
-		this.model.setAlignment(Pos.CENTER);
-		this.model.minHeight(140.0);
-		this.model.minWidth(110.0);
-		
-		DropShadow shadow = new DropShadow();
-		shadow.setHeight(8.0);
-		shadow.setRadius(3.5);
-		shadow.setWidth(8.0);
-		this.model.setEffect(shadow);
-		
-		Label cardText = new Label(this.toString());
-		cardText.setFont(new Font(36.0));
-		cardText.setTextAlignment(TextAlignment.CENTER);
-		if (this.suit == 'H' || this.suit == 'D') {
-			cardText.setTextFill(Color.RED);
-		}
-
-		this.model.getChildren().add(cardText);
+		updateModel();
 	}
 
 	public char getSuit() {
@@ -96,5 +81,42 @@ public class Card {
 				break;
 		}
 		return suit + face;
+	}
+
+	private void updateModel() {
+		// Create model of card
+		this.model = new VBox();
+		this.model.getStyleClass().add("card");
+		this.model.setAlignment(Pos.CENTER);
+		this.model.minHeight(140.0);
+		this.model.minWidth(110.0);
+		
+		DropShadow shadow = new DropShadow();
+		shadow.setHeight(8.0);
+		shadow.setRadius(3.5);
+		shadow.setWidth(8.0);
+		this.model.setEffect(shadow);
+		
+		Label cardText = new Label(this.toString());
+		cardText.setFont(new Font(36.0));
+		cardText.setTextAlignment(TextAlignment.CENTER);
+		if (this.suit == 'H' || this.suit == 'D') {
+			cardText.setTextFill(Color.RED);
+		}
+
+		this.model.getChildren().add(cardText);
+	}
+
+	
+	private void readObject(ObjectInputStream input) throws ClassNotFoundException, IOException {
+		face = input.readInt();
+		suit = input.readChar();
+
+		updateModel();
+	}
+
+	private void writeObject(ObjectOutputStream output) throws IOException {
+		output.writeInt(face);
+		output.writeChar(suit);
 	}
 }

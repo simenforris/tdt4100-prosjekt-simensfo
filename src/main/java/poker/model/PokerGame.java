@@ -1,9 +1,13 @@
 package poker.model;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Stack;
 
-public class PokerGame {
+public class PokerGame implements Serializable {
 	private int round;
 	private Deck deck;
 	private Hand playerHand;
@@ -25,6 +29,7 @@ public class PokerGame {
 		this.computerWon = new Stack<Card>();
 		this.warCards = new Stack<Card>();
 		this.playerPlay = new Play("Player Play:", true);
+		this.winner = "";
 	}
 
 	public int getRound() {
@@ -122,5 +127,32 @@ public class PokerGame {
 			}
 			winner = "tie";
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void readObject(ObjectInputStream input) throws ClassNotFoundException, IOException {
+		round = input.readInt();
+		deck = (Deck) input.readObject();
+		playerHand = (Hand) input.readObject();
+		computerHand = (Computer) input.readObject();
+		playerWon = (Stack<Card>) input.readObject();
+		computerWon = (Stack<Card>) input.readObject();
+		warCards = (Stack<Card>) input.readObject();
+		playerPlay = (Play) input.readObject();
+		computerPlay = (Play) input.readObject();
+		winner = input.readUTF();
+	}
+
+	private void writeObject(ObjectOutputStream output) throws IOException {
+		output.writeInt(round);
+		output.writeObject(deck);
+		output.writeObject(playerHand);
+		output.writeObject(computerHand);
+		output.writeObject(playerWon);
+		output.writeObject(computerWon);
+		output.writeObject(warCards);
+		output.writeObject(playerPlay);
+		output.writeObject(computerPlay);
+		output.writeUTF(winner);
 	}
 }

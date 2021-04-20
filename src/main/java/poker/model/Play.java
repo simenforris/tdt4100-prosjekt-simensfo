@@ -1,5 +1,9 @@
 package poker.model;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Stack;
 
@@ -12,7 +16,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
-public class Play {
+public class Play implements Serializable {
 	private Stack<Card> cards;
 	private String label;
 	private Boolean textOnTop;
@@ -137,5 +141,20 @@ public class Play {
 	@Override
 	public String toString() {
 		return this.cards.toString();
+	}
+
+	@SuppressWarnings("unchecked")
+	private void readObject(ObjectInputStream input) throws ClassNotFoundException, IOException {
+		cards = (Stack<Card>) input.readObject();
+		label = input.readUTF();
+		textOnTop = input.readBoolean();
+
+		updateModel();
+	}
+
+	private void writeObject(ObjectOutputStream output) throws IOException {
+		output.writeObject(cards);
+		output.writeUTF(label);
+		output.writeBoolean(textOnTop);
 	}
 }
