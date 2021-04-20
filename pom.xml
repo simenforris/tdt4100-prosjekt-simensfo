@@ -9,13 +9,6 @@
   <name>poker</name>
 
   <dependencies>
-
-  	<!-- <dependency>
-  		<groupId>org.openjfx</groupId>
-  		<artifactId>javafx-fxml</artifactId>
-  		<version>17-ea+2</version>
-  	</dependency> -->
-
 	  <!-- JavaFX FXML -->
 	<dependency>
 		<groupId>org.openjfx</groupId>
