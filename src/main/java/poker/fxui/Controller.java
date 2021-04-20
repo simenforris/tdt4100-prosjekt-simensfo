@@ -7,10 +7,12 @@ import java.util.LinkedList;
 import java.util.Map;
 
 // JavaFX imports
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
@@ -73,7 +75,7 @@ public class Controller {
 	@FXML
 	private Button loadButton;
 
-	// A variable to keep handsize synced if it is ever changed
+	// A variable to keep handsize synced in case it is ever changed
 	private final static int handSize = 5;
 	// Storing winner text in a map to display it without if-statements
 	private final static Map<String, String> winnerText = Map.of("player", "You Win!", "computer", "Computer Wins!", "tie", "Its a Tie!");
@@ -169,23 +171,42 @@ public class Controller {
 	}
 
 	private void gameOver() {
+		this.playerWonCount.setText("Player Won: " + String.valueOf(this.game.getPlayerWon().size()));
+		this.computerWonCount.setText("Computer Won: " + String.valueOf(this.game.getComputerWon().size()));
+		this.warCardsCount.setText("War Cards: " + String.valueOf(this.game.getWarCards().size()));
+
 		this.board.setTop(null);
 		this.board.setBottom(null);
 		this.playButton.setVisible(false);
 		this.infoText.setText(this.game.getPlayerWon().size() > this.game.getComputerWon().size() ? "Game Over. You Win!" : "Game Over. Computer Wins!");
 
-		// Should be an exit button as well
 		Button newGameButton = new Button();
 		newGameButton.setText("New Game");
+		newGameButton.setFont(new Font(18));
+		newGameButton.setPrefWidth(115.0);
 		newGameButton.onActionProperty().set(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle(ActionEvent event) {
 				initialize();
 			};
 		});
-		newGameButton.setFont(new Font(18));
+		
+		Button exitButton = new Button();
+		exitButton.setText("Exit");
+		exitButton.setFont(new Font(18));
+		exitButton.setPrefWidth(115.0);
+		exitButton.onActionProperty().set(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Platform.exit();
+			}
+		});
 
-		this.board.setBottom(newGameButton);
+		HBox box = new HBox(newGameButton, exitButton);
+		box.setAlignment(Pos.CENTER);
+		box.setSpacing(15.0);
+
+		this.board.setBottom(box);
 	}
 
 	@FXML
