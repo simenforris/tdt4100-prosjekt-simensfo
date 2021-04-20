@@ -6,18 +6,30 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.EmptyStackException;
 
 public class Deck implements Serializable {
 	private Stack<Card> cards;
-	private final char[] suits = {'S', 'H', 'D', 'C'};
+	private static final char[] suits = {'S', 'H', 'D', 'C'};
 
 	public Deck() {
 		this.cards = new Stack<Card>();
 
 		int n = 13;
-		for (int i = 0; i < this.suits.length; i++) {
+		for (int i = 0; i < suits.length; i++) {
 			for (int j = 0; j < n; j++) {
-				this.cards.push(new Card(this.suits[i], j + 1));
+				this.cards.push(new Card(suits[i], j + 1));
+			}
+		}
+	}
+
+	public Deck(boolean noModel) {
+		this.cards = new Stack<Card>();
+
+		int n = 13;
+		for (int i = 0; i < suits.length; i++) {
+			for (int j = 0; j < n; j++) {
+				this.cards.push(new Card(suits[i], j + 1, noModel));
 			}
 		}
 	}
@@ -38,7 +50,10 @@ public class Deck implements Serializable {
 		return this.cards.empty();
 	}
 
-	public Card draw() {
+	public Card draw() throws EmptyStackException {
+		if (this.size() == 0) {
+			throw new EmptyStackException();
+		}
 		return this.cards.pop();
 	}
 	

@@ -20,27 +20,31 @@ public class Hand implements Serializable {
 		return this.cards.length;
 	}
 
-	public void addCard(int i, Card card) {
+	public void addCard(int i, Card card) throws IndexOutOfBoundsException, IllegalStateException, IllegalArgumentException {
+		if (i < 0 || i >= size()) {
+			throw new IndexOutOfBoundsException("Index out of bounds");
+		}
+		if (this.cards[i] != null) {
+			throw new IllegalStateException("Hand slot already taken");
+		}
+		if (Arrays.asList(this.cards).indexOf(card) != -1) {
+			throw new IllegalArgumentException("Card already in hand");
+		}
 		this.cards[i] = card;
 	}
 
-	public Card getCard(int i) {
+	public Card getCard(int i) throws IndexOutOfBoundsException {
+		if (i < 0 || i >= size()) {
+			throw new IndexOutOfBoundsException("Index out of bounds");
+		}
 		return this.cards[i];
 	}
 
-	public int getCard(Card card) {
-		return Arrays.asList(this.cards).indexOf(card);
-	}
-
-	public Card playCard(int i) {
-		Card card = this.cards[i];
-		this.cards[i] = null;
-		return card;
-	}
-
-	// Må ha error handling
-	public Card playCard(Card card) {
-		int index = getCard(card);
+	public Card playCard(Card card) throws IllegalArgumentException {
+		int index = Arrays.asList(this.cards).indexOf(card);
+		if (index == -1) {
+			throw new IllegalArgumentException("Card not in hand");
+		}
 		Card cardToPlay = this.cards[index];
 		this.cards[index] = null;
 		return cardToPlay;

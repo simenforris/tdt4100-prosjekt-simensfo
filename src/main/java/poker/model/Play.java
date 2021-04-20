@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.EmptyStackException;
 import java.util.Stack;
 
 import javafx.geometry.HPos;
@@ -30,16 +31,19 @@ public class Play implements Serializable {
 		updateModel();
 	}
 
-	public Card getCard(int i) {
+	public Play() {
+		this.cards = new Stack<Card>();
+	}
+
+	public Card getCard(int i) throws IndexOutOfBoundsException{
+		if (i < 0 || i >= size()) {
+			throw new IndexOutOfBoundsException();
+		}
 		return this.cards.get(i);
 	}
 
 	public int size() {
 		return this.cards.size();
-	}
-
-	public GridPane getModel() {
-		return this.model;
 	}
 
 	public void push(Card card) {
@@ -50,7 +54,10 @@ public class Play implements Serializable {
 		this.cards.clear();
 	}
 
-	public Card pop() {
+	public Card pop() throws EmptyStackException {
+		if (this.size() == 0) {
+			throw new EmptyStackException();
+		}
 		return this.cards.pop();
 	}
 
@@ -97,6 +104,15 @@ public class Play implements Serializable {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return this.cards.toString();
+	}
+
+	public GridPane getModel() {
+		return this.model;
+	}
+
 	public void updateModel() {
 		this.model = new GridPane();
 		this.model.setMinSize(360.0, 200.0);
@@ -136,11 +152,6 @@ public class Play implements Serializable {
 		for (int i = 0; i < this.cards.size(); i++) {
 			this.model.add(this.cards.get(i).getModel(), i, cardRow);
 		}
-	}
-
-	@Override
-	public String toString() {
-		return this.cards.toString();
 	}
 
 	@SuppressWarnings("unchecked")
