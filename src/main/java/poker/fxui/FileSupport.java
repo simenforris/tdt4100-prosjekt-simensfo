@@ -27,7 +27,6 @@ public class FileSupport implements IFileReading {
 			Files.createDirectories(getUserFolderPath());
 			return true;
 		} catch(IOException e) {
-			System.out.println(e);
 			return false;
 		}
 	}
