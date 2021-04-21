@@ -34,62 +34,62 @@ public class PokerGame implements Serializable {
 	}
 
 	public int getRound() {
-		return this.round;
+		return round;
 	}
 
 	public Deck getDeck() {
-		return this.deck;
+		return deck;
 	}
 
 	public Hand getPlayerHand() {
-		return this.playerHand;
+		return playerHand;
 	}
 
 	public Hand getComputerHand() {
-		return this.computerHand;
+		return computerHand;
 	}
 
 	public Stack<Card> getPlayerWon() {
-		return this.playerWon;
+		return playerWon;
 	}
 
 	public Stack<Card> getComputerWon() {
-		return this.computerWon;
+		return computerWon;
 	}
 
 	public Stack<Card> getWarCards() {
-		return this.warCards;
+		return warCards;
 	}
 
 	public Play getPlayerPlay() {
-		return this.playerPlay;
+		return playerPlay;
 	}
 
 	public Play getComputerPlay() {
-		return this.computerPlay;
+		return computerPlay;
 	}
 
 	public String getWinner() {
-		return this.winner;
+		return winner;
 	}
 
 	public void refillHands() {
-		for (int i = 0; i < this.playerHand.size(); i++) {
-			if (this.playerHand.getCard(i) == null) {
-				this.playerHand.addCard(i, this.deck.draw());
+		for (int i = 0; i < playerHand.size(); i++) {
+			if (playerHand.getCard(i) == null) {
+				playerHand.addCard(i, deck.draw());
 			}
-			if (this.computerHand.getCard(i) == null) {
-				this.computerHand.addCard(i, this.deck.draw());
+			if (computerHand.getCard(i) == null) {
+				computerHand.addCard(i, deck.draw());
 			}
 		}
 	}
 
 	public void makePlays(LinkedList<Card> selectedCards) {
-		this.computerPlay = computerHand.makePlay();
+		computerPlay = computerHand.makePlay();
 
 		for (Card card : selectedCards) {
-			Card cardToPlay = this.playerHand.playCard(card);
-			this.playerPlay.push(cardToPlay);
+			Card cardToPlay = playerHand.playCard(card);
+			playerPlay.push(cardToPlay);
 		}
 	}
 
@@ -122,7 +122,7 @@ public class PokerGame implements Serializable {
 			winner = "tie";
 		}
 
-		this.round++;
+		round++;
 		if (round <= 8) {
 			refillHands();
 		}

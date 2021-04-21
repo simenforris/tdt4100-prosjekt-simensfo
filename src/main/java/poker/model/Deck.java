@@ -24,31 +24,31 @@ public class Deck implements Serializable {
 	}
 
 	public int size() {
-		return this.cards.size();
+		return cards.size();
 	}
 
 	public Card getCard(int index) {
-		return this.cards.get(index);
+		return cards.get(index);
 	}
 	
 	public void shuffle() {
-		Collections.shuffle(this.cards);
+		Collections.shuffle(cards);
 	}
 
 	public boolean isEmpty() {
-		return this.cards.empty();
+		return cards.empty();
 	}
 
 	public Card draw() throws EmptyStackException {
-		if (this.size() == 0) {
+		if (size() == 0) {
 			throw new EmptyStackException();
 		}
-		return this.cards.pop();
+		return cards.pop();
 	}
 	
 	@Override
 	public String toString() {
-		return this.cards.toString();
+		return cards.toString();
 	}
 
 	@Override

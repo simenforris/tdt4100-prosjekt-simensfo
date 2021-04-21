@@ -19,37 +19,37 @@ public class Play implements Serializable {
 	}
 
 	public String getLabel() {
-		return this.label;
+		return label;
 	}
 
 	public boolean getTextOnTop() {
-		return this.textOnTop;
+		return textOnTop;
 	}
 
 	public Card getCard(int i) throws IndexOutOfBoundsException{
 		if (i < 0 || i >= size()) {
 			throw new IndexOutOfBoundsException();
 		}
-		return this.cards.get(i);
+		return cards.get(i);
 	}
 
 	public int size() {
-		return this.cards.size();
+		return cards.size();
 	}
 
 	public void push(Card card) {
-		this.cards.push(card);
+		cards.push(card);
 	}
 
 	public void clear() {
-		this.cards.clear();
+		cards.clear();
 	}
 
 	public Card pop() throws EmptyStackException {
-		if (this.size() == 0) {
+		if (size() == 0) {
 			throw new EmptyStackException();
 		}
-		return this.cards.pop();
+		return cards.pop();
 	}
 
 	// Score calculation
@@ -97,7 +97,7 @@ public class Play implements Serializable {
 
 	@Override
 	public String toString() {
-		return this.cards.toString();
+		return cards.toString();
 	}
 
 	@Override

@@ -91,30 +91,30 @@ public class Controller {
 
 	@FXML
 	private void initialize() {
-		this.selectedCards = new LinkedList<Card>();
-		this.game = new PokerGame(handSize);
-		this.game.refillHands();
+		selectedCards = new LinkedList<Card>();
+		game = new PokerGame(handSize);
+		game.refillHands();
 
 		updateBoard();
 	}
 
 	private void updateBoard() {
-		this.roundCounter.setText("Round: " + String.valueOf(this.game.getRound()));
-		this.playerWonCount.setText("Player Won: " + String.valueOf(this.game.getPlayerWon().size()));
-		this.computerWonCount.setText("Computer Won: " + String.valueOf(this.game.getComputerWon().size()));
-		this.warCardsCount.setText("War Cards: " + String.valueOf(this.game.getWarCards().size()));
-		this.infoText.setText("Play 3 Cards");
-		this.saveInfo.setText("");
-		this.playButton.setVisible(true);
-		this.playButton.setDisable(true);
-		this.playButton.setText("Commit Play");
+		roundCounter.setText("Round: " + String.valueOf(game.getRound()));
+		playerWonCount.setText("Player Won: " + String.valueOf(game.getPlayerWon().size()));
+		computerWonCount.setText("Computer Won: " + String.valueOf(game.getComputerWon().size()));
+		warCardsCount.setText("War Cards: " + String.valueOf(game.getWarCards().size()));
+		infoText.setText("Play 3 Cards");
+		saveInfo.setText("");
+		playButton.setVisible(true);
+		playButton.setDisable(true);
+		playButton.setText("Commit Play");
 		
-		this.board.setTop(null);
-		this.board.setBottom(null);
+		board.setTop(null);
+		board.setBottom(null);
 
-		this.hand.getChildren().clear();
-		for (int i = 0; i < this.game.getPlayerHand().size(); i++) {
-			Card card = this.game.getPlayerHand().getCard(i);
+		hand.getChildren().clear();
+		for (int i = 0; i < game.getPlayerHand().size(); i++) {
+			Card card = game.getPlayerHand().getCard(i);
 
 			VBox cardModel = card.getModel(modelBuilder);
 			cardModel.getStyleClass().add("inhand");
@@ -136,34 +136,34 @@ public class Controller {
 					playButton.setDisable(! (selectedCards.size() == 3));
 				}
 			});
-			this.hand.add(cardModel, i, 0);
+			hand.add(cardModel, i, 0);
 		}
 	}
 
 	@FXML
 	private void commitPlay() {
-		if (this.selectedCards.size() == 3) {
+		if (selectedCards.size() == 3) {
 		
 			for (Node card : hand.getChildren()) {
 				card.getStyleClass().remove("inhand");
 				card.setOnMouseClicked(null);
 			}
 
-			this.game.makePlays(selectedCards);
+			game.makePlays(selectedCards);
 
-			for (int i = 0; i < this.game.getPlayerPlay().size(); i++) {
-				this.hand.getChildren().remove(this.game.getPlayerPlay().getCard(i).getModel(modelBuilder));				
+			for (int i = 0; i < game.getPlayerPlay().size(); i++) {
+				hand.getChildren().remove(game.getPlayerPlay().getCard(i).getModel(modelBuilder));				
 			}
 			selectedCards.clear();
 
-			this.board.setTop(modelBuilder.buildModel(this.game.getComputerPlay()));
-			this.board.setBottom(modelBuilder.buildModel(this.game.getPlayerPlay()));
+			board.setTop(modelBuilder.buildModel(game.getComputerPlay()));
+			board.setBottom(modelBuilder.buildModel(game.getPlayerPlay()));
 
-			this.game.calculateWinner();
-			infoText.setText(winnerText.get(this.game.getWinner()));
-			this.playButton.setText("Continue");
+			game.calculateWinner();
+			infoText.setText(winnerText.get(game.getWinner()));
+			playButton.setText("Continue");
 		} else {
-			if (this.game.getRound() <= 8) {
+			if (game.getRound() <= 8) {
 				updateBoard();
 			} else {
 				gameOver();
@@ -172,14 +172,14 @@ public class Controller {
 	}
 
 	private void gameOver() {
-		this.playerWonCount.setText("Player Won: " + String.valueOf(this.game.getPlayerWon().size()));
-		this.computerWonCount.setText("Computer Won: " + String.valueOf(this.game.getComputerWon().size()));
-		this.warCardsCount.setText("War Cards: " + String.valueOf(this.game.getWarCards().size()));
+		playerWonCount.setText("Player Won: " + String.valueOf(game.getPlayerWon().size()));
+		computerWonCount.setText("Computer Won: " + String.valueOf(game.getComputerWon().size()));
+		warCardsCount.setText("War Cards: " + String.valueOf(game.getWarCards().size()));
 
-		this.board.setTop(null);
-		this.board.setBottom(null);
-		this.playButton.setVisible(false);
-		this.infoText.setText(this.game.getPlayerWon().size() > this.game.getComputerWon().size() ? "Game Over. You Win!" : "Game Over. Computer Wins!");
+		board.setTop(null);
+		board.setBottom(null);
+		playButton.setVisible(false);
+		infoText.setText(game.getPlayerWon().size() > game.getComputerWon().size() ? "Game Over. You Win!" : "Game Over. Computer Wins!");
 
 		Button newGameButton = new Button();
 		newGameButton.setText("New Game");
@@ -207,7 +207,7 @@ public class Controller {
 		box.setAlignment(Pos.CENTER);
 		box.setSpacing(15.0);
 
-		this.board.setBottom(box);
+		board.setBottom(box);
 	}
 
 	@FXML
@@ -260,10 +260,10 @@ public class Controller {
 		String name = browseFileLocation(true);
 		if (! (name == null || name.isBlank())) {
 			try {
-				fileSupport.writeSaveFile(this.game, name);
-				this.saveInfo.setText("Saved game to file: " + name.substring(name.lastIndexOf("\\") + 1));
+				fileSupport.writeSaveFile(game, name);
+				saveInfo.setText("Saved game to file: " + name.substring(name.lastIndexOf("\\") + 1));
 			} catch (final IOException e) {
-				this.saveInfo.setText(e.getMessage());
+				saveInfo.setText(e.getMessage());
 			}
 		}
 	}
@@ -275,11 +275,11 @@ public class Controller {
 		if (! (name == null || name.isBlank())) {
 			try {
 				loadedGame = fileSupport.readSaveFile(name);
-				this.game = loadedGame;
+				game = loadedGame;
 				updateBoard();
-				this.saveInfo.setText("Loaded save file: " + name.substring(name.lastIndexOf("\\") + 1));
+				saveInfo.setText("Loaded save file: " + name.substring(name.lastIndexOf("\\") + 1));
 			} catch (Exception e) {
-				this.saveInfo.setText(e.getMessage());;
+				saveInfo.setText(e.getMessage());;
 			}
 		}
 	}

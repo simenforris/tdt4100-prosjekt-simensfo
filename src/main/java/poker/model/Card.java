@@ -25,18 +25,18 @@ public class Card implements Serializable {
 	}
 
 	public char getSuit() {
-		return this.suit;
+		return suit;
 	}
 
 	public int getFace() {
-		return this.face;
+		return face;
 	}
 
 	public VBox getModel(ModelBuilder modelBuilder) {
-		if (this.model == null) {
-			this.model = modelBuilder.buildModel(this);
+		if (model == null) {
+			model = modelBuilder.buildModel(this);
 		}
-		return this.model;
+		return model;
 	}
 
 	@Override
