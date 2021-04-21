@@ -142,7 +142,6 @@ public class Controller {
 
 	@FXML
 	private void commitPlay() {
-		// Not really a good way to determine button function
 		if (this.selectedCards.size() == 3) {
 		
 			for (Node card : hand.getChildren()) {
@@ -264,7 +263,7 @@ public class Controller {
 				fileSupport.writeSaveFile(this.game, name);
 				this.saveInfo.setText("Saved game to file: " + name.substring(name.lastIndexOf("\\") + 1));
 			} catch (final IOException e) {
-				System.out.println(e);
+				this.saveInfo.setText(e.getMessage());
 			}
 		}
 	}
@@ -280,7 +279,7 @@ public class Controller {
 				updateBoard();
 				this.saveInfo.setText("Loaded save file: " + name.substring(name.lastIndexOf("\\") + 1));
 			} catch (Exception e) {
-				System.out.println(e);
+				this.saveInfo.setText(e.getMessage());;
 			}
 		}
 	}
