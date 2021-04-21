@@ -100,6 +100,26 @@ public class Play implements Serializable {
 		return this.cards.toString();
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) {
+			return true;
+		}
+		if (! (obj instanceof Play)) {
+			return false;
+		}
+		Play p = (Play) obj;
+		if (p.size() != size()) {
+			return false;
+		}
+		for (int i = 0; i < p.size(); i++) {
+			if (! p.getCard(i).equals(getCard(i))) {
+				return false;
+			}
+		}
+		return p.getTextOnTop() == textOnTop && p.getLabel().compareTo(label) == 0;
+	}
+
 	@SuppressWarnings("unchecked")
 	private void readObject(ObjectInputStream input) throws ClassNotFoundException, IOException {
 		cards = (Stack<Card>) input.readObject();

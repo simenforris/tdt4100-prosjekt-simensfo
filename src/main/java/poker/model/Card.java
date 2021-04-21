@@ -79,6 +79,18 @@ public class Card implements Serializable {
 		}
 		return suit + face;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) {
+			return true;
+		}
+		if (! (obj instanceof Card)) {
+			return false;
+		}
+		Card c = (Card) obj;
+		return c.suit == suit && c.face == face;
+	}
 	
 	private void readObject(ObjectInputStream input) throws ClassNotFoundException, IOException {
 		face = input.readInt();

@@ -55,6 +55,26 @@ public class Hand implements Serializable {
 		return Arrays.toString(this.cards);
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) {
+			return true;
+		}
+		if (! (obj instanceof Hand)) {
+			return false;
+		}
+		Hand h = (Hand) obj;
+		if (h.size() != size()) {
+			return false;
+		}
+		for (int i = 0; i < h.size(); i++) {
+			if (! h.getCard(i).equals(getCard(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	private void readObject(ObjectInputStream input) throws ClassNotFoundException, IOException {
 		cards = (Card[]) input.readObject();
 	}

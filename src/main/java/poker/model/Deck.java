@@ -51,6 +51,26 @@ public class Deck implements Serializable {
 		return this.cards.toString();
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) {
+			return true;
+		}
+		if (! (obj instanceof Deck)) {
+			return false;
+		}
+		Deck d = (Deck) obj;
+		if (d.size() != size()) {
+			return false;
+		}
+		for (int i = 0; i < d.size(); i++) {
+			if (! d.getCard(i).equals(getCard(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	@SuppressWarnings("unchecked")
 	private void readObject(ObjectInputStream input) throws ClassNotFoundException, IOException {
 		cards = (Stack<Card>) input.readObject();

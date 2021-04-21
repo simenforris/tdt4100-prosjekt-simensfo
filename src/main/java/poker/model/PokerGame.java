@@ -128,6 +128,51 @@ public class PokerGame implements Serializable {
 		}
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) {
+			return true;
+		}
+		if (! (obj instanceof PokerGame)) {
+			return false;
+		}
+		PokerGame g = (PokerGame) obj;
+		if (! g.getDeck().equals(deck)) {
+			return false;
+		}
+		if (! (g.getPlayerHand().equals(playerHand) && g.getComputerHand().equals(computerHand))) {
+			return false;
+		}
+		if (! (g.getPlayerPlay().equals(playerPlay) && g.getComputerPlay().equals(computerPlay))) {
+			return false;
+		}
+		if (g.getPlayerWon().size() != playerWon.size()) {
+			return false;
+		}
+		for (int i = 0; i < g.getPlayerWon().size(); i++) {
+			if (! g.getPlayerWon().get(i).equals(playerWon.get(i))) {
+				return false;
+			}
+		}
+		if (g.getComputerWon().size() != computerWon.size()) {
+			return false;
+		}
+		for (int i = 0; i < g.getComputerWon().size(); i++) {
+			if (! g.getComputerWon().get(i).equals(computerWon.get(i))) {
+				return false;
+			}
+		}
+		if (g.getWarCards().size() != warCards.size()) {
+			return false;
+		}
+		for (int i = 0; i < g.getWarCards().size(); i++) {
+			if (! g.getWarCards().get(i).equals(warCards.get(i))) {
+				return false;
+			}
+		}
+		return g.getRound() == round && g.getWinner().compareTo(winner) == 0;
+	}
+
 	@SuppressWarnings("unchecked")
 	private void readObject(ObjectInputStream input) throws ClassNotFoundException, IOException {
 		round = input.readInt();
