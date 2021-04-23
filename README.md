@@ -11,6 +11,7 @@ Points are given as follows:
 - Nothing: 1 point
 
 High card is not counted. A pair of 2 is worth the same as a pair of 10
+
 An Ace is always worth 1
 
 ### Things to add
