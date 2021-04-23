@@ -18,7 +18,7 @@
                      <Font size="20.0" />
                   </font>
                </Text>
-               <TextArea editable="false" layoutX="9.0" layoutY="40.0" prefHeight="324.0" prefWidth="254.0" text="WarPoker is a game of War where the winner is decided through Poker rules. The winner gets all cards in play. If there is a tie all played cards get added to the war cards pile, and the next winner gets all played cards in addition to the war cards. &#10;&#10;Points are given as follows:&#10;- Straight Flush: 6 points&#10;- Three of a kind: 5 points&#10;- Straight: 4 points&#10;- Flush: 3 points&#10;- Pair: 2 points&#10;- Nothing: 1 point&#10;&#10;High card is not counted. A pair of 2 is worth the same as a pair of 10&#10;" wrapText="true" />
+               <TextArea editable="false" layoutX="9.0" layoutY="40.0" prefHeight="324.0" prefWidth="254.0" text="WarPoker is a game of War where the winner is decided through Poker rules. The winner gets all cards in play. If there is a tie all played cards get added to the war cards pile, and the next winner gets all played cards in addition to the war cards. &#10;&#10;Points are given as follows:&#10;- Straight Flush: 6 points&#10;- Three of a kind: 5 points&#10;- Straight: 4 points&#10;- Flush: 3 points&#10;- Pair: 2 points&#10;- Nothing: 1 point&#10;&#10;High card is not counted. A pair of 2 is worth the same as a pair of 10&#10; An Ace is always worth 1" wrapText="true" />
                <Button layoutX="218.0" layoutY="371.0" mnemonicParsing="false" onAction="#closeModal" text="Close" />
             </children>
       	</AnchorPane>
